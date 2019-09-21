@@ -23,7 +23,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import bluetooth.app.internal.LEDBlueWidget;
 import bluetooth.app.internal.LEDGreenWidget;
@@ -89,16 +88,13 @@ public class MainActivity extends AppCompatActivity {
         // Register for broadcasts when a device is discovered.
         IntentFilter deviceFoundFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(deviceFoundReceiver, deviceFoundFilter);
-//        // register for scanning start
-//        IntentFilter discoveryStartedFilter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
-//        registerReceiver(discoveryStartedReceiver, discoveryStartedFilter);
-//        IntentFilter discoveryFinishedFilter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-//        registerReceiver(discoveryStoppedReceiver, discoveryFinishedFilter);
+        // Register for bonding state
         IntentFilter bondingFilter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
         registerReceiver(bondStateReceiver, bondingFilter);
-
+        // checks permissions
         checkBTPermissions();
-        setupButton();
+        // sets-up the UI
+        setupUI();
     }
 
     @Override
@@ -109,27 +105,21 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // unregister the ACTION_FOUND deviceFoundReceiver.
+        // unregister receivers
         unregisterReceiver(deviceFoundReceiver);
-        // unregisterReceiver(discoveryStartedReceiver);
-        // unregisterReceiver(discoveryStoppedReceiver);
         unregisterReceiver(bondStateReceiver);
     }
 
 
-    private void setupButton() {
+    private void setupUI() {
         connection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     pairOrDiscover();
-                    for (CommandButtonWidget widget : commandWidgets) {
-                        widget.enable();
-                    }
+                    updateWidgets(true);
 
                 } else {
-                    for (CommandButtonWidget widget : commandWidgets) {
-                        widget.disable();
-                    }
+                    updateWidgets(false);
                     try {
                         deviceManager.disconnect();
                     } catch (IOException e) {
@@ -144,8 +134,21 @@ public class MainActivity extends AppCompatActivity {
         commandWidgets.add(new LEDGreenWidget(deviceManager, (Button) findViewById(R.id.btnGREEN)));
         commandWidgets.add(new LEDBlueWidget(deviceManager, (Button) findViewById(R.id.btnBLUE)));
         // all buttons are disabled at start
+        updateWidgets(false);
+    }
+
+    /**
+     * Updates contents of command widgets
+     *
+     * @param enabledState - the enabled state
+     */
+    private void updateWidgets(boolean enabledState) {
         for (CommandButtonWidget widget : commandWidgets) {
-            widget.disable();
+            if (enabledState) {
+                widget.enable();
+            } else {
+                widget.disable();
+            }
         }
     }
 
@@ -176,57 +179,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    private void sendData(BluetoothDevice device) {
-//        try {
-//            if (deviceManager.hasActiveDevice()) {
-//                connectionStatus.setText(R.string.deviceReady);
-//                deviceManager.connect();
-//                Timer t;
-//                t = new Timer();
-//                t.schedule(new TimerTask() {
-//                    @Override
-//                    public void run() {
-//
-//
-//                        MainActivity.this.runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                try {
-//                                    connectionStatus.setText(deviceManager.read());
-//                                } catch (IOException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        });
-//                        ;
-//
-//
-//                    }}, 100L, 500L);
-//
-//            }
-//        } catch (IOException ioe) {
-//            Toast.makeText(this, ioe.getMessage(), Toast.LENGTH_LONG).show();
-//        }
-//    }
-
-    private BroadcastReceiver discoveryStartedReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action == BluetoothAdapter.ACTION_DISCOVERY_STARTED) {
-
-            }
-        }
-    };
-    private BroadcastReceiver discoveryStoppedReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action == BluetoothAdapter.ACTION_DISCOVERY_FINISHED) {
-
-            }
-        }
-    };
 
     private BroadcastReceiver bondStateReceiver = new BroadcastReceiver() {
         @Override
@@ -246,7 +198,6 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                     Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
-                    //sendData(mDevice);
                 }
                 //case2: creating a bone
                 if (mDevice.getBondState() == BluetoothDevice.BOND_BONDING) {
@@ -269,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
      * <p>
      * NOTE: This will only execute on versions > LOLLIPOP because it is not needed otherwise.
      */
-    @TargetApi(23)
+    @TargetApi(Build.VERSION_CODES.M)
     private void checkBTPermissions() {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             int permissionCheck = checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
@@ -278,8 +229,6 @@ public class MainActivity extends AppCompatActivity {
 
                 this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001); //Any number
             }
-        } else {
-            // Log.d(TAG, "checkBTPermissions: No need to check permissions. SDK version < LOLLIPOP.");
         }
     }
 
