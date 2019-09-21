@@ -14,6 +14,6 @@ public class LEDGreenWidget extends CommandButtonWidget {
 
     @Override
     protected Command getCommand() {
-       return new LEDGreenCommand();
+        return new LEDGreenCommand();
     }
 }

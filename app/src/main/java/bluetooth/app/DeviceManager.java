@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class DeviceManager {
-    Set<DeviceDescriptor> devices = new HashSet<>();
+    private Set<DeviceDescriptor> devices = new HashSet<>();
     private DeviceDescriptor activeDevice;
     private BluetoothAdapter adapter;
 
@@ -21,12 +21,12 @@ public class DeviceManager {
         addPairedDevices(adapter.getBondedDevices());
     }
 
-    public boolean isBluetoothEnabled(){
+    public boolean isBluetoothEnabled() {
         return adapter.isEnabled();
     }
 
-    public void startDiscovery(){
-        if (adapter.isDiscovering()){
+    public void startDiscovery() {
+        if (adapter.isDiscovering()) {
             cancelDiscovery();
         }
         adapter.startDiscovery();
@@ -94,7 +94,7 @@ public class DeviceManager {
     public String connect() throws IOException {
         if (hasActiveDevice()) {
             activeDevice.connect();
-            return "Connected to: "+activeDevice.getName();
+            return "Connected to: " + activeDevice.getName();
         }
         return null;
     }

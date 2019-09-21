@@ -26,11 +26,11 @@ public abstract class CommandButtonWidget {
         });
     }
 
-    public void enable(){
+    public void enable() {
         button.setEnabled(true);
     }
 
-    public void disable(){
+    public void disable() {
         button.setEnabled(false);
     }
 

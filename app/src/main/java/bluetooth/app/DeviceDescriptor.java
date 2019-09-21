@@ -4,7 +4,6 @@ package bluetooth.app;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -15,13 +14,13 @@ import java.util.Objects;
 public class DeviceDescriptor {
     private String name;
     private String address;
-     BluetoothDevice _device;
-     private BluetoothSocket socket;
+    BluetoothDevice _device;
+    private BluetoothSocket socket;
 
 
     public DeviceDescriptor(@NotNull BluetoothDevice btDevice) {
         this(btDevice.getName(), btDevice.getAddress());
-        this._device=btDevice;
+        this._device = btDevice;
     }
 
 
@@ -54,7 +53,7 @@ public class DeviceDescriptor {
 
     public void connect() throws IOException {
         socket = _device.createInsecureRfcommSocketToServiceRecord(_device.getUuids()[0].getUuid());
-        if (socket.isConnected()){
+        if (socket.isConnected()) {
             socket.close();
         }
         // connect
@@ -62,33 +61,33 @@ public class DeviceDescriptor {
     }
 
     public void disconnect() throws IOException {
-        if (socket==null || !socket.isConnected()){
-           throw new IOException("You must connect first.");
+        if (socket == null || !socket.isConnected()) {
+            throw new IOException("You must connect first.");
         }
         socket.close();
     }
 
     public String read() throws IOException {
-        if (socket==null || !socket.isConnected()){
+        if (socket == null || !socket.isConnected()) {
             throwConnectionException();
         }
         InputStream inStream = socket.getInputStream();
         int byteSize = inStream.available();
         byte[] content = new byte[byteSize];
-        String message = new String(content,"UTF-8");
+        String message = new String(content, "UTF-8");
         return message;
 
     }
 
     public void write(String message) throws IOException {
-        if (socket==null || !socket.isConnected()){
+        if (socket == null || !socket.isConnected()) {
             throwConnectionException();
         }
         OutputStream outStream = socket.getOutputStream();
         outStream.write(message.getBytes());
     }
 
-    private void throwConnectionException() throws IOException{
+    private void throwConnectionException() throws IOException {
         throw new IOException("You must connect first.");
     }
 }

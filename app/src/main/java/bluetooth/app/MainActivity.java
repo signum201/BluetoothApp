@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,7 +14,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -23,12 +21,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 
 import bluetooth.app.internal.LEDBlueWidget;
@@ -130,29 +124,29 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     pairOrDiscover();
-                    for (CommandButtonWidget widget : commandWidgets){
+                    for (CommandButtonWidget widget : commandWidgets) {
                         widget.enable();
                     }
 
                 } else {
-                    for (CommandButtonWidget widget: commandWidgets){
+                    for (CommandButtonWidget widget : commandWidgets) {
                         widget.disable();
                     }
                     try {
                         deviceManager.disconnect();
                     } catch (IOException e) {
-                        Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
 
                 }
             }
         });
         commandWidgets.add(new LEDOffWidget(deviceManager, (Button) findViewById(R.id.btnOFF)));
-        commandWidgets.add(new LEDRedWidget(deviceManager,(Button)findViewById(R.id.btnRED)));
-        commandWidgets.add(new LEDGreenWidget(deviceManager,(Button)findViewById(R.id.btnGREEN)));
-        commandWidgets.add(new LEDBlueWidget(deviceManager,(Button)findViewById(R.id.btnBLUE)));
+        commandWidgets.add(new LEDRedWidget(deviceManager, (Button) findViewById(R.id.btnRED)));
+        commandWidgets.add(new LEDGreenWidget(deviceManager, (Button) findViewById(R.id.btnGREEN)));
+        commandWidgets.add(new LEDBlueWidget(deviceManager, (Button) findViewById(R.id.btnBLUE)));
         // all buttons are disabled at start
-        for (CommandButtonWidget widget: commandWidgets){
+        for (CommandButtonWidget widget : commandWidgets) {
             widget.disable();
         }
     }
@@ -171,15 +165,15 @@ public class MainActivity extends AppCompatActivity {
             deviceManager.setActive(alreadyPaired);
             String message;
             try {
-               message =   deviceManager.connect();
+                message = deviceManager.connect();
             } catch (IOException e) {
-               message = e.getMessage();
+                message = e.getMessage();
 
             }
-            Toast.makeText(this,message,Toast.LENGTH_LONG).show();
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         } else {
 
-           deviceManager.startDiscovery();
+            deviceManager.startDiscovery();
         }
 
     }
@@ -250,10 +244,10 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         message = deviceManager.connect();
                     } catch (IOException e) {
-                        message=e.getMessage();
+                        message = e.getMessage();
 
                     }
-                    Toast.makeText(MainActivity.this,message,Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
                     //sendData(mDevice);
                 }
                 //case2: creating a bone
