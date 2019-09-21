@@ -11,9 +11,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -23,6 +25,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import bluetooth.app.internal.LEDBlueWidget;
 import bluetooth.app.internal.LEDGreenWidget;
@@ -62,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+    private boolean stopThread = false;
+    private TextView textView;
+    private Timer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +108,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         try {
+            if (timer != null) {
+                timer.cancel();
+            }
             deviceManager.disconnect();
         } catch (IOException e) {
             e.printStackTrace();
@@ -117,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 if (isChecked) {
                     pairOrDiscover();
                     updateWidgets(true);
+                    startRead();
 
                 } else {
                     updateWidgets(false);
@@ -125,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
+                    stopThread = true;
 
                 }
             }
@@ -135,6 +147,14 @@ public class MainActivity extends AppCompatActivity {
         commandWidgets.add(new LEDBlueWidget(deviceManager, (Button) findViewById(R.id.btnBLUE)));
         // all buttons are disabled at start
         updateWidgets(false);
+        setupLog();
+    }
+
+    private void setupLog() {
+        textView = (TextView) findViewById(R.id.textLog);
+        textView.setMovementMethod(new ScrollingMovementMethod());
+
+
     }
 
     /**
@@ -150,6 +170,36 @@ public class MainActivity extends AppCompatActivity {
                 widget.disable();
             }
         }
+    }
+
+    private void startRead() {
+        stopThread = false;
+        timer = new Timer();
+        TimerTask readTask = new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    if (stopThread) {
+                        timer.cancel();
+                        return;
+                    }
+                    String message = deviceManager.read();
+                    if (message != null) {
+                        String trimmed = message.trim();
+                        if (!trimmed.isEmpty()) {
+                            textView.append(message + "\n");
+                        }
+                    }
+                } catch (Exception e) {
+                    stopThread = true;
+                }
+
+            }
+        };
+
+        timer.scheduleAtFixedRate(readTask, 10, 200);
+
+
     }
 
     private void pairOrDiscover() {

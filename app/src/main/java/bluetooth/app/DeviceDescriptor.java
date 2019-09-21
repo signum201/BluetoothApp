@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 /**
@@ -75,9 +76,11 @@ public class DeviceDescriptor {
             throwConnectionException();
         }
         InputStream inStream = socket.getInputStream();
+
         int byteSize = inStream.available();
         byte[] content = new byte[byteSize];
-        String message = new String(content, "UTF-8");
+        inStream.read(content);
+        String message = new String(content, StandardCharsets.UTF_8);
         return message;
 
     }
