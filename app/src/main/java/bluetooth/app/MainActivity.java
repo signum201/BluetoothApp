@@ -37,11 +37,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final Integer BT_CONNECT_REQ = 100;
     private static final String DEVICE_NAME = "HC05";//"DESKTOP-SN993KP";
-    private BluetoothAdapter adapter;
     private DeviceManager deviceManager;
     private List<CommandButtonWidget> commandWidgets = new ArrayList<>();
-    private static final UUID MY_UUID_INSECURE =
-            UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
 
     // Create a BroadcastReceiver for ACTION_FOUND.
     private final BroadcastReceiver deviceFoundReceiver = new BroadcastReceiver() {

@@ -11,6 +11,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Objects;
 
+/**
+ * Device decriptor which is responsible for providing access to the underlying Bluetooth device.
+ */
 public class DeviceDescriptor {
     private String name;
     private String address;

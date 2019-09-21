@@ -5,6 +5,9 @@ import java.io.IOException;
 
 import bluetooth.app.Command;
 
+/**
+ * Generic HC-05 Command
+ */
 public abstract class HC05Command extends Command {
     private static final String SET = "set";
     private static final Integer WAIT = 200;
