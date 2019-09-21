@@ -7,11 +7,11 @@ import bluetooth.app.Command;
 
 public abstract class HC05Command extends Command {
     private static final String SET = "set";
-    private static final Integer WAIT=200;
+    private static final Integer WAIT = 200;
 
     protected void prepare() throws IOException {
         send(SET);
-      delay();
+        delay();
 
     }
 
@@ -21,7 +21,7 @@ public abstract class HC05Command extends Command {
         delay();
     }
 
-    private void delay(){
+    private void delay() {
         try {
             Thread.sleep(WAIT);
         } catch (InterruptedException e) {
@@ -31,6 +31,7 @@ public abstract class HC05Command extends Command {
 
     /**
      * The text for the command
+     *
      * @return the text
      */
     protected abstract String getCommandText();
