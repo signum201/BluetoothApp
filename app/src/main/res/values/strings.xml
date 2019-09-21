@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">BluetoothApp</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="notAvailable">Bluetooth not available</string>
+    <string name="deviceNotFound">Device not found!</string>
+    <string name="discoveryStarted">Scanning for devices</string>
+    <string name="discoveryFinished">Scanning stopped</string>
+    <string name="deviceFound">Found device with name:</string>
+    <string name="searchingForDevice">Searching for device with name:</string>
+    <string name="bondingToDevice">Connecting to device with name:</string>
+    <string name="deviceReady">Device ready to recevie data</string>
+</resources>
