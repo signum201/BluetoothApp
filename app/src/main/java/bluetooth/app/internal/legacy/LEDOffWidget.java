@@ -1,28 +1,27 @@
-package bluetooth.app.internal;
+package bluetooth.app.internal.legacy;
 
 import android.widget.Button;
 
 import bluetooth.app.Command;
 import bluetooth.app.CommandButtonWidget;
 import bluetooth.app.DeviceManager;
-import bluetooth.app.internal.hc05commands.LEDBlueCommand;
 
 /**
- * Widget for Blue LED command
+ * Widget for LED off command
  */
-public class LEDBlueWidget extends CommandButtonWidget {
+public class LEDOffWidget extends CommandButtonWidget {
     /**
      * Constructor
      *
      * @param manager - the device manager
      * @param button  - the button
      */
-    public LEDBlueWidget(DeviceManager manager, Button button) {
+    public LEDOffWidget(DeviceManager manager, Button button) {
         super(manager, button);
     }
 
     @Override
     protected Command getCommand() {
-        return new LEDBlueCommand();
+        return new LEDOffCommand();
     }
 }

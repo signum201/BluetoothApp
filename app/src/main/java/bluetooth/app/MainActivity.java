@@ -6,9 +6,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -19,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
@@ -28,10 +25,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import bluetooth.app.internal.LEDBlueWidget;
-import bluetooth.app.internal.LEDGreenWidget;
-import bluetooth.app.internal.LEDOffWidget;
-import bluetooth.app.internal.LEDRedWidget;
+import bluetooth.app.internal.legacy.LEDBlueWidget;
+import bluetooth.app.internal.legacy.LEDGreenWidget;
+import bluetooth.app.internal.legacy.LEDOffWidget;
+import bluetooth.app.internal.legacy.LEDRedWidget;
 
 
 public class MainActivity extends AppCompatActivity {
