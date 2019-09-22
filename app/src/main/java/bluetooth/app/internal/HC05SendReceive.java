@@ -8,5 +8,6 @@ public abstract class HC05SendReceive {
 
     public HC05SendReceive(HC05Command command, HC05Data data){
 
+
     }
 }
