@@ -3,6 +3,7 @@ package bluetooth.app;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.os.ParcelUuid;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -11,6 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Device decriptor which is responsible for providing access to the underlying Bluetooth device.
@@ -56,7 +58,9 @@ public class DeviceDescriptor {
     }
 
     public void connect() throws IOException {
-        socket = _device.createInsecureRfcommSocketToServiceRecord(_device.getUuids()[0].getUuid());
+        String uid="00001101-0000-1000-8000-00805F9B34FB";
+
+        socket = _device.createInsecureRfcommSocketToServiceRecord(UUID.fromString(uid));
         if (socket.isConnected()) {
             socket.close();
         }

@@ -6,7 +6,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
@@ -71,34 +74,35 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.second_layout);
-//        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-//        if (adapter == null) {
-//            new AlertDialog.Builder(this)
-//                    .setTitle("Not compatible")
-//                    .setMessage("Your phone does not support Bluetooth")
-//                    .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            System.exit(0);
-//                        }
-//                    })
-//                    .setIcon(android.R.drawable.ic_dialog_alert)
-//                    .show();
-//        }
-//        deviceManager = new DeviceManager(adapter);
-//        // get UI elements
-//        connection = (ToggleButton) findViewById(R.id.buttonConnection);
-//
-//        // Register for broadcasts when a device is discovered.
-//        IntentFilter deviceFoundFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-//        registerReceiver(deviceFoundReceiver, deviceFoundFilter);
-//        // Register for bonding state
-//        IntentFilter bondingFilter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
-//        registerReceiver(bondStateReceiver, bondingFilter);
-//        // checks permissions
-//        checkBTPermissions();
-//        // sets-up the UI
-//        setupUI();
+       // setContentView(R.layout.second_layout);
+        setContentView(R.layout.activity_main);
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        if (adapter == null) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Not compatible")
+                    .setMessage("Your phone does not support Bluetooth")
+                    .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            System.exit(0);
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
+        deviceManager = new DeviceManager(adapter);
+        // get UI elements
+        connection = (ToggleButton) findViewById(R.id.buttonConnection);
+
+        // Register for broadcasts when a device is discovered.
+        IntentFilter deviceFoundFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        registerReceiver(deviceFoundReceiver, deviceFoundFilter);
+        // Register for bonding state
+        IntentFilter bondingFilter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
+        registerReceiver(bondStateReceiver, bondingFilter);
+        // checks permissions
+        checkBTPermissions();
+        // sets-up the UI
+        setupUI();
     }
 
     @Override
@@ -184,7 +188,8 @@ public class MainActivity extends AppCompatActivity {
                     if (message != null) {
                         String trimmed = message.trim();
                         if (!trimmed.isEmpty()) {
-                            textView.append(message + "\n");
+                            String existingText = textView.getText().toString();
+                            textView.setText(trimmed +"\n"+existingText);
                         }
                     }
                 } catch (Exception e) {

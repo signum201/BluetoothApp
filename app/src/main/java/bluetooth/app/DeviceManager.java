@@ -4,6 +4,8 @@ package bluetooth.app;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -39,7 +41,7 @@ public class DeviceManager {
         }
     }
 
-    private void addPairedDevices(Set<BluetoothDevice> pairedDevices) {
+    private void addPairedDevices(@NotNull Set<BluetoothDevice> pairedDevices) {
         for (BluetoothDevice btDevice : pairedDevices) {
             addPairedDevice(btDevice);
         }
@@ -111,6 +113,6 @@ public class DeviceManager {
         if (hasActiveDevice()) {
             return activeDevice.read();
         }
-        return new String("Not active device found!");
+        return "Not active device found!";
     }
 }
